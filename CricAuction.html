@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CricAuction</title>
+<style>
+:root{--r:#c92b20;--r2:#8d1712;--bg:#f5f7fb;--fg:#172033;--card:#fff;--bd:#e4e8f0;--mut:#758096;--g:#199b63;--nav:#101827;--shadow:0 14px 35px #17203312;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#111827;--fg:#f2f5fa;--card:#1b2536;--bd:#334155;--mut:#9aa8bd;--nav:#0b1220;--shadow:0 14px 35px #0005}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#ffffffed,#f8fbfff0),url("https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=2200&q=85") center/cover fixed;color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.01em}
+#app{width:100%;min-height:100vh;position:relative;padding-bottom:90px}
+.hd{background:linear-gradient(110deg,var(--r2),var(--r));color:#fff;padding:20px max(24px,calc((100% - 1320px)/2));display:flex;align-items:center;gap:14px;font-weight:800;font-size:19px;letter-spacing:.08em;text-transform:uppercase;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;box-shadow:0 5px 18px #83150e2b}
+.hd b{cursor:pointer;font-size:30px;font-weight:400;line-height:1}
+.bd{width:min(100% - 48px,1320px);margin:0 auto;padding:24px 0}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:20px;margin-bottom:16px;cursor:pointer;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px #17203320}
+.card h3{margin:8px 0;font-size:20px}.mut{color:var(--mut);font-size:13px}
+input,select{width:100%;padding:14px;border:1px solid var(--bd);border-radius:6px;margin:6px 0;font-size:16px;background:var(--card);color:var(--fg)}
+input:focus,select:focus,.btn:focus,.tb:focus,.chip:focus{outline:3px solid #fc06;outline-offset:2px}
+label{font-size:13px;color:var(--mut)}
+.btn{display:block;width:100%;background:linear-gradient(110deg,var(--r2),var(--r));color:#fff;border:0;border-radius:10px;padding:14px 18px;font-size:15px;font-weight:800;letter-spacing:.03em;cursor:pointer;margin:8px 0;box-shadow:0 8px 18px #b01e1430;transition:transform .2s,filter .2s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.secondary{background:transparent;color:var(--r);border:1px solid #e3a19d;box-shadow:none}
+.icon-btn{background:#ffffff1c;border:1px solid #fff5;color:#fff;border-radius:9px;padding:7px 10px;cursor:pointer;font-size:16px}
+.btn.g{background:var(--g)}.btn.o{background:#777}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.tabs{display:flex;background:var(--nav);overflow-x:auto;padding-top:5px}
+.tabs div{padding:13px 18px;color:#9ca9bd;font-weight:700;cursor:pointer;font-size:13px;letter-spacing:.06em;white-space:nowrap}
+.tabs .on{color:#fff;border-bottom:3px solid #ffbd59}
+.fab{position:fixed;right:24px;bottom:90px;width:56px;height:56px;border-radius:50%;background:var(--r);color:#fff;font-size:30px;border:0;box-shadow:0 3px 8px #0006;cursor:pointer}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{padding:10px 14px;border:2px solid var(--bd);border-radius:20px;cursor:pointer;font-size:14px;background:var(--card)}
+.chip.on{border-color:var(--r);color:var(--r);font-weight:700}
+.li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
+.tag{font-size:12px;padding:2px 8px;border-radius:10px;background:#8883}
+.tag.s{background:#4fa81733;color:var(--g)}.tag.u{background:#b01e1433;color:var(--r)}
+.big{font-size:32px;font-weight:800;color:var(--r);text-align:center;margin:6px 0}
+.tb{min-height:82px;padding:18px 20px;border:2px solid var(--bd);border-radius:14px;background:var(--card);color:var(--fg);cursor:pointer;text-align:left;font-size:17px;box-shadow:0 6px 16px #17203310;transition:transform .2s,box-shadow .2s}.tb:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 10px 22px #1720331c}.tb b{font-size:19px}.tb .mut{font-size:15px}
+.tb.l{border-color:var(--g);background:#4fa81722}.tb[disabled]{opacity:.4}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.stat b{display:block;font-size:24px;color:var(--r)}
+.progress{height:7px;background:var(--bd);border-radius:9px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;background:var(--g)}
+.empty{text-align:center;padding:48px 12px;border:1px dashed var(--bd);border-radius:18px;background:var(--card)}
+.avatar{width:48px;height:48px;object-fit:cover;border-radius:50%;background:linear-gradient(135deg,#ffbd59,var(--r));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex:none}.player-row{display:flex;align-items:center;gap:12px}.player-photo{width:112px;height:112px;object-fit:cover;border-radius:18px;box-shadow:0 10px 25px #0003;border:3px solid #fff}.photo-upload{padding:14px;border:1px dashed var(--r);border-radius:12px;background:#c92b2010;margin:8px 0}
+.auction-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,.8fr);gap:24px;align-items:start}.auction-layout>.card{margin:0}.recent-card{position:sticky;top:88px}.recent-title{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:14px;margin-bottom:4px}.recent-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd)}.recent-item:last-child{border-bottom:0}.recent-item img,.recent-avatar{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none}.recent-avatar{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffbd59,var(--r));color:#fff;font-weight:800;font-size:22px}.price{color:var(--r);font-size:18px;font-weight:800}.balance{color:var(--g);font-weight:800}.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.detail-grid div{padding:12px;border-radius:10px;background:var(--bg)}.detail-grid b{display:block;font-size:16px;margin-top:3px}
+.list-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.list-grid .li{min-height:92px;padding:18px;border:1px solid var(--bd);border-radius:14px;background:var(--card);box-shadow:var(--shadow);border-bottom:1px solid var(--bd)}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px}.result-team{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.result-team-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--bd)}.result-team-head h3{margin:0;font-size:20px}.result-players{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}.result-player{display:flex;align-items:center;gap:9px;padding:11px;border-radius:12px;background:var(--bg);border:1px solid var(--bd)}.result-player .avatar{width:38px;height:38px;font-size:15px}.result-player img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.mvp-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}.mvp-card{background:linear-gradient(145deg,#fff8e6,var(--card));border:1px solid #f0c96a;border-radius:18px;padding:20px;box-shadow:var(--shadow);position:sticky;top:88px}.mvp-card h3{margin:0}.mvp-list{margin-top:14px}.mvp-item{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid #e7d59c}.mvp-item:last-child{border-bottom:0}.mvp-rank{font-weight:900;color:#c68a00;width:24px}.mvp-item .avatar,.mvp-item img{width:48px;height:48px;border-radius:12px;object-fit:cover}.mvp-item .price{margin-left:auto}
+.ft{position:fixed;bottom:0;left:0;width:100%;padding:10px max(24px,calc((100% - 1320px)/2)) calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--bd)}
+@media(min-width:760px){.bd{padding-top:32px}.bd>.card{display:inline-block;width:calc(50% - 8px);vertical-align:top;margin-right:8px}.stats{max-width:600px}.tabs{padding-left:max(24px,calc((100% - 1320px)/2));padding-right:max(24px,calc((100% - 1320px)/2))}.tabs div{padding-left:18px;padding-right:18px}.ft .row{max-width:1320px;margin:0 auto}.ft .btn{max-width:280px;margin-left:auto}.ft .btn.secondary{margin-left:0;margin-right:auto}}
+@media(max-width:759px){.bd{width:calc(100% - 28px);padding:14px 0}.hd{padding-left:14px;padding-right:14px}.ft{padding-left:14px;padding-right:14px}.fab{right:16px}}
+@media(max-width:900px){.auction-layout{display:block}.recent-card,.mvp-card{position:static;margin-top:18px!important}.mvp-layout{display:block}}
+</style></head><body><div id="app"></div>
+<script>
+function load(){try{return JSON.parse(localStorage.getItem('ca'))||{a:[]}}catch(e){return{a:[]}}}
+const saturdayTurf=()=>{const id=()=>Math.random().toString(36).slice(2,8),names=['Antony Asish Anthony Muthu','Arshad Abdeen Shahul Hameed','Aruldhas Arul Prakasam','Micheal','Sam','Gautham Natarajan','Gnanaprakash Sivajothi','Gokul Lakshmanan','Gopinath Singan','Harry Manohar','Jackins Baskaran','Jebin James Babu','Jemmy Silekha Nathan','Jenish Ponraj Peter Jebaraj Thangadurai','Jeyaram Ravichandran','KarthiKeyan Murugan','Lakshmana Selvan Venkatesh','Leelakrishnan Kuppan','Mangala Aravinthan Selvan','Manojkumar Baskaran','Mohamed Hanifa Kaja Mydeen','Muthuraja Muthuraj','Ramakarthison T','RobinRaj Raja','Samson Albert Joyson','Sree Veerabagu Eswaramuthu Samy','Vijay Eswarlal','Vijayaraj M','Yugeshwaran Ganesan','Abhinesh','santhosh','raja sankar'],teams=['Aravindan Thangaiah','KarthiKeyan Murugan','Chinnathurai Mayandi','Santhosh Adaikkan'];return{id:id(),name:'Saturday Turf',date:'2026-10-17',time:'16:00',purse:10000,minBid:100,inc:100,ppt:8,venue:'SPG Turf',unit:'Rupees',teams:teams.map(name=>({id:id(),name,purse:10000})),players:names.map(name=>({id:id(),name,age:'',role:'Batsman',base:100,status:'pending',photo:''}))}};
+let S=load();if(!S.a.length){S.a=[saturdayTurf()];try{localStorage.setItem('ca',JSON.stringify(S))}catch(e){}}let V={s:'home',tab:'teams'};
+const save=()=>{try{localStorage.setItem('ca',JSON.stringify(S))}catch(e){}};
+const uid=()=>Math.random().toString(36).slice(2,8);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $v=id=>document.getElementById(id).value.trim();
+const A=()=>S.a.find(a=>a.id==V.aid);
+const M=(a,n)=>Number(n).toLocaleString('en-IN')+' '+a.unit;
+const cnt=(a,t)=>a.players.filter(p=>p.team==t.id).length;
+const go=(s,x)=>{V={...V,s,...x};R();scrollTo(0,0)};
+const hd=(t,back,actions='')=>`<div class="hd"><b onclick="${back}" aria-label="Go back">‹</b><span style="flex:1">${t}</span>${actions}</div>`;
+const ROLES=['Batsman','Bowler','Wicket Keeper','All Rounder'];
+const theme=()=>{const dark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',dark?'light':'dark');localStorage.setItem('ca-theme',dark?'light':'dark')};
+if(localStorage.getItem('ca-theme'))document.documentElement.setAttribute('data-theme',localStorage.getItem('ca-theme'));
+
+function R(){const a=A(),f={home,create,auction,addTeam,addPlayer,live}[V.s];document.getElementById('app').innerHTML=f(a)}
+
+function home(){return `<div class="hd"><span style="flex:1">CricAuction™</span><span class="mut" style="color:#fff9;font-size:11px;letter-spacing:.12em">AUCTION CONTROL CENTER</span><button class="icon-btn" onclick="theme()" aria-label="Toggle dark mode">☾</button></div><div class="bd">
+<div style="padding:18px 4px 26px"><div class="mut" style="color:var(--r);font-weight:800;letter-spacing:.12em">WELCOME BACK</div><h1 style="font-size:clamp(28px,4vw,44px);margin:8px 0 4px;letter-spacing:-.04em">Build your winning team.</h1><p class="mut" style="font-size:15px;max-width:560px">Create, manage and run your cricket auctions from one powerful dashboard.</p></div>
+<div class="row" style="align-items:center"><h4 style="flex:1;margin:8px 0;font-size:18px">My Auctions</h4><span class="mut">${S.a.length} total</span></div>
+${S.a.map(a=>{const sold=a.players.filter(p=>p.status=='sold').length,total=a.players.length;return `<div class="card" onclick="go('auction',{aid:'${a.id}',tab:'teams'})"><span class="mut">📅 ${esc(a.date)||'Date not set'} ${esc(a.time)||''} · ${a.ppt} players/team</span><h3>${esc(a.name)}</h3><span class="mut">📍 ${esc(a.venue)||'Venue not set'}</span><div style="margin-top:8px;color:var(--r);font-weight:700">${M(a,a.purse)}/team · ${a.teams.length} teams · ${total} players</div><div class="progress" title="${sold} of ${total} players sold"><i style="width:${total?Math.round(sold/total*100):0}%"></i></div><span class="mut">${sold}/${total} players sold</span></div>`}).join('')||'<div class="empty"><div style="font-size:32px">🏏</div><p class="mut">No auctions yet.</p><p class="mut">Create an auction to start building your league.</p></div>'}
+<button class="btn" onclick="go('create')">＋ Create Auction</button></div>`}
+
+function create(){return hd('Create Auction',"go('home')")+`<div class="bd">
+<label>Sport</label><select><option>Cricket</option></select>
+<label>Auction name *</label><input id="n" placeholder="e.g. Sunday Premier League" autocomplete="off">
+<div class="row"><div><label>Date</label><input id="d" type="date"></div><div><label>Time</label><input id="t" type="time"></div></div>
+<div class="row"><div><label>Team balance</label><input id="pu" type="number" min="1" placeholder="5000"></div><div><label>Minimum bid</label><input id="mb" type="number" min="1" placeholder="100"></div></div>
+<div class="row"><div><label>Bid increase</label><input id="inc" type="number" min="1" placeholder="100"></div><div><label>Players per team</label><input id="ppt" type="number" min="1" placeholder="11"></div></div>
+<label>Venue</label><input id="ve" placeholder="e.g. City Sports Ground">
+<label>Point System</label><select id="u"><option>Points</option><option>Coins</option><option>Rupees</option><option>Credits</option></select>
+<button class="btn g" onclick="mkA()">Save</button></div>`}
+function mkA(){const n=$v('n');if(!n)return alert('Enter auction name');
+S.a.unshift({id:uid(),name:n,date:$v('d'),time:$v('t'),purse:+$v('pu')||5000,minBid:+$v('mb')||100,inc:+$v('inc')||100,ppt:+$v('ppt')||11,venue:$v('ve'),unit:$v('u'),teams:[],players:[]});save();go('auction',{aid:S.a[0].id,tab:'teams'})}
+
+function auction(a){const T=['teams','players','results'];const sold=a.players.filter(p=>p.status=='sold').length;
+let b='';
+if(V.tab=='teams')b=`<div class="list-grid">${a.teams.map(t=>`<div class="li"><div><b>${esc(t.name)}</b><br><span class="mut">${cnt(a,t)}/${a.ppt} players · ${Math.round(cnt(a,t)/a.ppt*100)}% full</span></div><b>${M(a,t.purse)}</b></div>`).join('')||'<div class="empty"><div style="font-size:30px">👥</div><p class="mut">No teams yet.</p><p class="mut">Add at least two teams before starting.</p></div>'}</div>`;
+if(V.tab=='players'){const q=(V.q||'').toLowerCase();b=`<input placeholder="Search Player" value="${esc(V.q||'')}" oninput="V.q=this.value;R();document.querySelector('input').focus()"><div class="list-grid">`+(a.players.filter(p=>p.name.toLowerCase().includes(q)).map(p=>`<div class="li"><div class="player-row">${p.photo?`<img class="avatar" src="${esc(p.photo)}" alt="${esc(p.name)}">`:`<span class="avatar">${esc(p.name[0])}</span>`}<div><b>${esc(p.name)}</b> <span class="tag ${p.status[0]}">${p.status}</span><br><span class="mut">${p.role} · Base ${M(a,p.base)}</span></div></div><span onclick="delP('${p.id}')" style="cursor:pointer">🗑</span></div>`).join('')||'<div class="empty"><div style="font-size:30px">🏏</div><p class="mut">No players found.</p></div>')+'</div>'}
+if(V.tab=='results'){const mvps=a.players.filter(p=>p.status=='sold').sort((x,y)=>(y.price||0)-(x.price||0)).slice(0,5);b=`<div class="mvp-layout"><div class="result-grid">${a.teams.map(t=>{const bought=a.players.filter(p=>p.team==t.id);return `<div class="result-team"><div class="result-team-head"><div><h3>${esc(t.name)}</h3><span class="mut">${bought.length}/${a.ppt} players bought</span></div><div style="text-align:right"><span class="mut">Balance left</span><br><b class="balance">${M(a,t.purse)}</b></div></div><div class="result-players">${bought.map(p=>`<div class="result-player">${p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.name)}">`:`<span class="avatar">${esc(p.name[0])}</span>`}<div style="min-width:0"><b>${esc(p.name)}</b><br><span class="mut">${esc(p.role)}</span><br><strong class="price">${M(a,p.price)}</strong></div></div>`).join('')||'<p class="mut">No players bought yet</p>'}</div></div>`}).join('')||'<div class="empty"><div style="font-size:30px">🏆</div><p class="mut">No team results yet.</p></div>'}</div><aside class="mvp-card"><div style="font-size:28px">🏅</div><h3>Most Valuable Players</h3><span class="mut">Top purchases by winning bid</span><div class="mvp-list">${mvps.map((p,i)=>{const t=a.teams.find(x=>x.id==p.team);return `<div class="mvp-item"><span class="mvp-rank">#${i+1}</span>${p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.name)}">`:`<span class="avatar">${esc(p.name[0])}</span>`}<div><b>${esc(p.name)}</b><br><span class="mut">${esc(t?t.name:'—')} · ${esc(p.role)}</span></div><strong class="price">${M(a,p.price)}</strong></div>`}).join('')||'<p class="mut" style="margin-top:18px">Sold players will appear here.</p>'}</div></aside></div>`}
+return hd(esc(a.name),"go('home')",`<button class="icon-btn" onclick="exportA()" aria-label="Export auction">⇩</button>`)+`<div class="tabs">${T.map(t=>`<div class="${V.tab==t?'on':''}" onclick="V.tab='${t}';V.q='';R()">${t.toUpperCase()}</div>`).join('')}</div>
+<div class="bd"><div class="mut" style="margin-bottom:8px">📅 ${esc(a.date)||'Date not set'} ${esc(a.time)||''} · 📍 ${esc(a.venue)||'—'} · ${M(a,a.purse)}/team</div><div class="stats"><div class="stat"><b>${a.teams.length}</b><span class="mut">Teams</span></div><div class="stat"><b>${a.players.length}</b><span class="mut">Players</span></div><div class="stat"><b>${sold}</b><span class="mut">Sold</span></div></div>${b}</div>
+${V.tab=='results'?'':`<button class="fab" onclick="go('${V.tab=='teams'?'addTeam':'addPlayer'}')">+</button>`}
+<div class="ft"><div class="row"><button class="btn secondary" onclick="removeA()">Delete</button><button class="btn" onclick="startA()">START AUCTION</button></div></div>`}
+function exportA(){const blob=new Blob([JSON.stringify(A(),null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),l=document.createElement('a');l.href=u;l.download=(A().name||'auction').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.json';l.click();URL.revokeObjectURL(u)}
+function removeA(){if(!confirm('Delete this auction and all its teams and players?'))return;S.a=S.a.filter(x=>x.id!=V.aid);save();go('home')}
+function delP(id){const a=A();if(!confirm('Delete player?'))return;a.players=a.players.filter(p=>p.id!=id);save();R()}
+function startA(){const a=A();if(a.teams.length<2||!a.players.length)return alert('Add at least 2 teams and 1 player first.');V.pid=null;go('live')}
+
+function addTeam(a){return hd('Add Team',"go('auction')")+`<div class="bd"><label>Team name *</label><input id="n" placeholder="e.g. Royal Challengers"><label>Team purse</label><input id="pu" type="number" min="1" value="${a.purse}" placeholder="Purse"><button class="btn g" onclick="mkT()">Save Team</button></div>`}
+function mkT(){const a=A(),n=$v('n');if(!n)return alert('Enter team name');a.teams.push({id:uid(),name:n,purse:+$v('pu')||a.purse});save();go('auction',{tab:'teams'})}
+
+function addPlayer(a){V.role=V.role||'Batsman';const d=V.draft||{};return hd('Add Player',"go('auction')")+`<div class="bd"><div class="photo-upload"><label>Player photo <span class="mut">optional</span></label><input id="photo" type="file" accept="image/*" onchange="previewPhoto(event)"><img id="photoPreview" class="player-photo" style="${V.photo?'margin-top:8px':'display:none;margin-top:8px'}" src="${esc(V.photo||'')}" alt="Selected player photo"></div><label>Full name *</label><input id="n" placeholder="e.g. Virat Sharma" value="${esc(d.name||'')}"><div class="row"><div><label>Age</label><input id="ag" type="number" min="1" placeholder="Age" value="${esc(d.age||'')}"></div></div>
+<label>Role</label><div class="chips">${ROLES.map(r=>`<div class="chip ${V.role==r?'on':''}" onclick="V.role='${r}';keep();R()">${r}</div>`).join('')}</div>
+<input id="bv" type="number" placeholder="Base Value" value="${esc(d.base||a.minBid)}">
+<button class="btn" onclick="mkP()">Add Player</button></div>`}
+function keep(){const n=document.getElementById('n'),ag=document.getElementById('ag'),bv=document.getElementById('bv');V.draft={name:n?n.value:'',age:ag?ag.value:'',base:bv?bv.value:''}}
+function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=document.getElementById('photoPreview');i.src=r.result;i.style.display='block';V.photo=r.result};r.readAsDataURL(f)}
+function mkP(){const a=A(),n=$v('n');if(!n)return alert('Enter player name');a.players.push({id:uid(),name:n,age:$v('ag'),role:V.role,base:+$v('bv')||a.minBid,status:'pending',photo:V.photo||''});V.photo='';V.draft=null;save();go('auction',{tab:'players'})}
+
+function live(a){const pend=a.players.filter(p=>p.status=='pending'),recent=a.players.filter(p=>p.status=='sold').sort((x,y)=>(y.soldAt||0)-(x.soldAt||0)).slice(0,6);
+let p=pend.find(x=>x.id==V.pid)||pend[0];
+if(!p){const un=a.players.filter(x=>x.status=='unsold').length;return hd('Live Auction',"go('auction')")+`<div class="bd" style="text-align:center"><h2>🏏 Auction complete</h2><p class="mut">${a.players.filter(x=>x.status=='sold').length} sold · ${un} unsold</p>${un?`<button class="btn o" onclick="reAuc()">Re-auction ${un} unsold</button>`:''}<button class="btn" onclick="V.tab='results';go('auction')">View Results</button></div>`}
+if(V.pid!=p.id){V.pid=p.id;V.lead=null;V.bid=p.base}
+const L=a.teams.find(t=>t.id==V.lead),nxt=V.lead?V.bid+a.inc:p.base;
+return hd('Live Auction',"go('auction')")+`<div class="bd"><div class="auction-layout"><div><div class="card" style="cursor:default;text-align:center;padding:24px 20px"><div class="mut">${pend.length} players left</div>${p.photo?`<img class="player-photo" style="width:120px;height:120px" src="${esc(p.photo)}" alt="${esc(p.name)}">`:`<span class="avatar" style="width:120px;height:120px;border-radius:20px;font-size:34px">${esc(p.name[0])}</span>`}<h2 style="font-size:24px;margin:12px 0 5px">${esc(p.name)}</h2><span class="tag">${p.role}</span>${p.age?` <span class="tag">Age ${esc(p.age)}</span>`:''}
+<div class="mut" style="margin-top:8px">${V.lead?'Current bid':'Base value'}</div><div class="big">${M(a,V.bid)}</div><b>${L?'🔨 '+esc(L.name):'Waiting for bids…'}</b></div>
+<p class="mut">Tap a team to bid ${M(a,nxt)}</p>
+<div class="row" style="flex-wrap:wrap">${a.teams.map(t=>{const ok=t.purse>=nxt&&cnt(a,t)<a.ppt&&t.id!=V.lead;return `<button class="tb ${t.id==V.lead?'l':''}" style="flex:1 1 45%" ${ok?'':'disabled'} onclick="bid('${t.id}')"><b>${esc(t.name)}</b><br><span class="mut">${M(a,t.purse)} · ${cnt(a,t)}/${a.ppt}</span></button>`}).join('')}</div>
+<div class="row" style="margin-top:12px"><button class="btn g" ${V.lead?'':'disabled style="opacity:.4"'} onclick="sold()">SOLD</button><button class="btn" onclick="unsold()">UNSOLD</button></div></div>${recentPanel(a,recent)}</div>`}
+function recentPanel(a,recent){return `<div class="card recent-card"><div class="recent-title"><b style="font-size:18px">Recent purchases</b><span class="tag s">${recent.length} sold</span></div>${recent.map(p=>{const t=a.teams.find(x=>x.id==p.team);return `<div class="recent-item">${p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.name)}">`:`<span class="recent-avatar">${esc(p.name[0])}</span>`}<div style="min-width:0;flex:1"><b>${esc(p.name)}</b><div class="mut">${esc(p.role)} · Bought by ${esc(t?t.name:'—')}</div><div class="detail-grid"><div><span class="mut">Winning bid</span><b class="price">${M(a,p.price)}</b></div><div><span class="mut">Team balance</span><b class="balance">${M(a,t?t.purse:0)}</b></div></div></div></div>`}).join('')||'<div class="empty" style="padding:28px 10px"><div style="font-size:28px">🛒</div><p class="mut">Sold players will appear here.</p></div>'}</div>`}
+function bid(tid){const a=A();V.bid=V.lead?V.bid+a.inc:a.players.find(p=>p.id==V.pid).base;V.lead=tid;R()}
+function sold(){const a=A(),p=a.players.find(x=>x.id==V.pid),t=a.teams.find(x=>x.id==V.lead);if(!t)return;
+Object.assign(p,{status:'sold',team:t.id,price:V.bid,soldAt:Date.now()});t.purse-=V.bid;save();V.pid=null;R()}
+function unsold(){const a=A(),p=a.players.find(x=>x.id==V.pid);p.status='unsold';save();V.pid=null;R()}
+function reAuc(){A().players.forEach(p=>{if(p.status=='unsold')p.status='pending'});save();V.pid=null;R()}
+R();
+</script></body></html>
